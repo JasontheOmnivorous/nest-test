@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -36,8 +37,10 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  // validate the request body with ValidationPipe
+  // this guy will automatically do error handling if the request is messed up
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
@@ -47,7 +50,7 @@ export class UsersController {
   @Patch(':id')
   updateOne(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
   ) {
     return this.usersService.update(id, updateUserDto);
   }
