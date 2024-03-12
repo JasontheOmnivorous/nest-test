@@ -9,7 +9,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { User } from 'src/types/users';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -36,16 +37,19 @@ export class UsersController {
   }
 
   @Post()
-  create(@Body() user: User) {
-    return this.usersService.create(user);
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
   }
 
   // ParseIntPipe is a built-in pipe middleware to parse data into integer type
   // by using ParseIntPipe, we inform nestjs that id must be a numeric string
   // so whenever user put in random bullshits in that place, nest will respond error message
   @Patch(':id')
-  updateOne(@Param('id', ParseIntPipe) id: number, @Body() userUpdate: {}) {
-    return this.usersService.update(id, userUpdate);
+  updateOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
